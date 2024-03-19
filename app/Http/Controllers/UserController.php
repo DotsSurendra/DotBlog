@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Auth;
 //use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Support\Facades\Cookie;
 
+use Carbon\Carbon;
+
 use App\Models\User;
 
 class UserController extends Controller
@@ -82,13 +84,15 @@ class UserController extends Controller
         $user =User::create( $data);
 
         if($user){
-
             $user->sendEmailVerificationNotification();
+            //$user->sendEmailVerificationNotification();
+            //return $user;
             //return redirect()->route('emailvarify');
-            return redirect()->route('verification.verify');
+            //return redirect()->route('verification.notice');
 
-            // Auth::login($user);
-            // return redirect()->intended('admin');
+             Auth::login($user);
+            // return redirect()->route('verification.notice');
+             return redirect()->intended('admin');
         }else
         {
         return back()->withErrors([
@@ -107,6 +111,7 @@ class UserController extends Controller
     public function responseGoogle(){
 
         $user = Socialite::driver('google')->user();
+        //dd($user->getAvatar());
 
         if($user){
             $existingUser = User::where('email', $user->getEmail())->first();
@@ -118,7 +123,9 @@ class UserController extends Controller
                     'name' => $user->getName(),
                     'email' => $user->getEmail(),
                     'password' => bcrypt('password'),
-                    'email_verify'=>'1'
+                    'profile_image'=>$user->getAvatar(),
+                    'email_verify'=> '1',
+                    'email_verified_at'=>Carbon::now()->toDateTimeString()
                 ]);
             }
             else{

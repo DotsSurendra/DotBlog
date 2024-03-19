@@ -30,7 +30,7 @@
 
 <div class="wrapper">
   <!-- Content Wrapper. Contains page content -->
- @if(request()->routeIs('login') || request()->routeIs('register') )
+ @if(request()->routeIs('login') || request()->routeIs('register') || request()->routeIs('verification.notice') )
     @yield('login')
  @else
     @include('backend.header')

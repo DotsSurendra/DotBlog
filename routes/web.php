@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\Auth\VerificationController;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,14 +39,16 @@ Route::prefix('admin')->group(function () {
         Route::get('/', [UserController::class, 'index'])->name('admin');
         Route::get('/logout',[UserController::class,'logout'])->name('logout');
 
-        Route::get('/email/verify', [UserController::class, 'emialVerify'])->name('verification.verify');
+        //Route::get('/email/verify', [UserController::class, 'emialVerify'])->name('verification.verify');
 
         //Route::get('/email/verify',[UserController::class,'emialVerify'])->name('verification.notice');
     });
 });
 
-//Route::get('/email/verify', [UserController::class, 'emailVerify'])->name('verification.notice');
 
-//Route::get('/email/verify', [UserController::class, 'emialVerify'])->middleware(['auth'])->name('verification.verify');
-
-
+// Define Custom Verification Routes
+Route::controller(VerificationController::class)->group(function() {
+    Route::get('/email/verify', 'notice')->name('verification.notice');
+    Route::get('/email/verify/{id}/{hash}', 'verify')->name('verification.verify');
+    Route::post('/email/resend', 'resend')->name('verification.resend');
+});
