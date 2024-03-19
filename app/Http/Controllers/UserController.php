@@ -79,8 +79,13 @@ class UserController extends Controller
         $user =User::create( $data);
 
         if($user){
-            Auth::login($user);
-            return redirect()->intended('admin');
+
+            $user->sendEmailVerificationNotification();
+            //return redirect()->route('emailvarify');
+            return redirect()->route('verification.verify');
+
+            // Auth::login($user);
+            // return redirect()->intended('admin');
         }else
         {
         return back()->withErrors([
@@ -97,5 +102,11 @@ class UserController extends Controller
         $request->session()->regenerateToken();
 
         return redirect()->intended('/admin/login');
+    }
+
+
+    public function emialVerify(){
+        return  view('backend.Pages.email_verify');
+        //return 'test';
     }
 }

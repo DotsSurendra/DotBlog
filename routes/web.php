@@ -29,7 +29,15 @@ Route::prefix('admin')->group(function () {
     Route::group(['middleware' => 'auth'], function () {
         Route::get('/', [UserController::class, 'index'])->name('admin');
         Route::get('/logout',[UserController::class,'logout'])->name('logout');
+
+        Route::get('/email/verify', [UserController::class, 'emialVerify'])->name('verification.verify');
+
+        //Route::get('/email/verify',[UserController::class,'emialVerify'])->name('verification.notice');
     });
 });
+
+//Route::get('/email/verify', [UserController::class, 'emailVerify'])->name('verification.notice');
+
+//Route::get('/email/verify', [UserController::class, 'emialVerify'])->middleware(['auth'])->name('verification.verify');
 
 
