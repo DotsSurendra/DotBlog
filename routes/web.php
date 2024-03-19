@@ -26,6 +26,13 @@ Route::prefix('admin')->group(function () {
     Route::post('login', [UserController::class, 'loginSave'])->name('login.save');
     Route::post('register', [UserController::class, 'registerSave'])->name('register.save');
 
+    //Route::get('google',[UserController::class,'redirectGoogle'])->name('redirectgoogle')->middleware('guest');
+    //Route::get('google',[UserController::class,'responceGoogle'])->name('callbackgoogle')->middleware('guest');
+
+    Route::get('google/redirect', [UserController::class, 'redirectGoogle'])->name('redirectgoogle')->middleware('guest');
+    Route::get('google/response', [UserController::class, 'responseGoogle'])->name('callbackgoogle')->middleware('guest');
+
+
     Route::group(['middleware' => 'auth'], function () {
         Route::get('/', [UserController::class, 'index'])->name('admin');
         Route::get('/logout',[UserController::class,'logout'])->name('logout');

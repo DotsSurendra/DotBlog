@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Laravel\Socialite\Facades\Socialite;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
+//use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Support\Facades\Cookie;
 
 use App\Models\User;
@@ -91,6 +94,52 @@ class UserController extends Controller
         return back()->withErrors([
             'errormsg' =>'Some thing wentwrong.!!!']);
         }
+    }
+
+
+
+    public function redirectGoogle(){
+
+        return Socialite::driver('google')->redirect();
+
+    }
+
+    public function responseGoogle(){
+
+        $user = Socialite::driver('google')->user();
+
+        if($user){
+            $existingUser = User::where('email', $user->getEmail())->first();
+
+            //dd($existingUser);
+
+            if(!$existingUser){
+                $authenticatedUser = User::firstOrCreate([
+                    'name' => $user->getName(),
+                    'email' => $user->getEmail(),
+                    'password' => bcrypt('password'),
+                    'email_verify'=>'1'
+                ]);
+            }
+            else{
+                $authenticatedUser = $existingUser;
+            }
+
+            if($authenticatedUser){
+                $authenticatedUser->update(['email_verify' => '1']);
+                Auth::login($authenticatedUser);
+                return redirect()->intended('admin');
+            }else
+            {
+            return back()->withErrors([
+                'errormsg' =>'Some thing wentwrong.!!!']);
+            } 
+        }else
+        {
+        return back()->withErrors([
+            'errormsg' =>'Some thing wentwrong.!!!']);
+        }
+        
     }
 
     public function logout(Request $request): RedirectResponse
