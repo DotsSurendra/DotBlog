@@ -1,6 +1,6 @@
 @extends('backend.app')
 @section('body-class', 'hold-transition login-page')
-@section('login')
+@section('content')
 
 
 <div class="row justify-content-center mt-5">

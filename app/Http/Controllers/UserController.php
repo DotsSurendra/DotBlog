@@ -85,13 +85,7 @@ class UserController extends Controller
 
         if($user){
             $user->sendEmailVerificationNotification();
-            //$user->sendEmailVerificationNotification();
-            //return $user;
-            //return redirect()->route('emailvarify');
-            //return redirect()->route('verification.notice');
-
-             Auth::login($user);
-            // return redirect()->route('verification.notice');
+            Auth::login($user);
              return redirect()->intended('admin');
         }else
         {

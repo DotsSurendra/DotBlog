@@ -29,18 +29,21 @@
 <body class="@yield('body-class')" >
 
 <div class="wrapper">
-  <!-- Content Wrapper. Contains page content -->
- @if(request()->routeIs('login') || request()->routeIs('register') || request()->routeIs('verification.notice') )
+  @guest
+    {{-- Guest content --}}
     @yield('login')
- @else
-    @include('backend.header')
-    @yield('content')
-    @include('backend.footer')
- @endif
-
-
-
-  <!-- /.content-wrapper -->
+  @else
+    {{-- Authenticated user --}}
+    @if(auth()->user()->email_verified_at)
+        {{-- User's email is verified --}}
+        @include('backend.header')
+        @yield('content')
+        @include('backend.footer')
+    @else
+        {{-- User's email is not verified --}}
+        @yield('content')
+    @endif
+@endguest
 </div>
 <!-- ./wrapper -->
 

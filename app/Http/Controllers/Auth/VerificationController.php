@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
+use App\Models\User;
+
 class VerificationController extends Controller
 {
     //
@@ -24,6 +26,14 @@ class VerificationController extends Controller
 
     public function verify(EmailVerificationRequest $request){
         $request->fulfill();
+
+        // Update the email_verify column to '1' for the authenticated user
+        if(auth()->check()) {
+            auth()->user()->update(['email_verify' => '1']);
+
+           //dd(auth()->user());
+        }
+
         return redirect()->route('admin');
     }
 
