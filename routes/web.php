@@ -40,6 +40,10 @@ Route::prefix('admin')->group(function () {
         Route::group(['middleware' => ['verified']], function() {
             Route::get('/', [UserController::class, 'index'])->name('admin');
             Route::get('/logout',[UserController::class,'logout'])->name('logout');
+            Route::get('/users',[UserController::class,'userList'])->name('users');
+            Route::get('/user/{id}',[UserController::class,'userView'])->name('user');
+
+
     });
     });
 });

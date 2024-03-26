@@ -159,4 +159,16 @@ class UserController extends Controller
         return  view('backend.Pages.email_verify');
         //return 'test';
     }
+
+
+    public function userList(){
+        $users =User::all();
+
+        return view('backend.pages.usersList',['users' =>$users]);
+    }
+
+   public function userView($id){
+        $user =User::find($id);
+        dd($user);
+    }
 }
