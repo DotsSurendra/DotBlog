@@ -29,18 +29,21 @@
 <body class="@yield('body-class')" >
 
 <div class="wrapper">
-  <!-- Content Wrapper. Contains page content -->
- @if(request()->routeIs('login') || request()->routeIs('register') )
+  @guest
+    {{-- Guest content --}}
     @yield('login')
- @else
-    @include('backend.header')
-    @yield('content')
-    @include('backend.footer')
- @endif
-
-
-
-  <!-- /.content-wrapper -->
+  @else
+    {{-- Authenticated user --}}
+    @if(auth()->user()->email_verified_at)
+        {{-- User's email is verified --}}
+        @include('backend.header')
+        @yield('content')
+        @include('backend.footer')
+    @else
+        {{-- User's email is not verified --}}
+        @yield('content')
+    @endif
+@endguest
 </div>
 <!-- ./wrapper -->
 
@@ -75,7 +78,7 @@
 <!-- AdminLTE App -->
 <script src="{{asset('backend/js/adminlte.js')}}"></script>
 <!-- AdminLTE for demo purposes -->
-<script src="{{asset('backend/js/demo.js')}}"></script>
+<!--<script src="{{asset('backend/js/demo.js')}}"></script>-->
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="{{asset('backend/js/pages/dashboard.js')}}"></script>
 </body>
